@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN" 
+"http://tiles.apache.org/dtds/tiles-config_3_0.dtd" >
+<tiles-definitions>
+	<definition name="main" template="/WEB-INF/main/main.jsp">
+		<!-- 아래 4개를 묶어서 실행하라는 뜻 -->
+		<put-attribute name="header" value="/WEB-INF/main/header.jsp"/>
+		<put-attribute name="nav" value="/WEB-INF/main/nav.jsp"/>
+		<put-attribute name="content" value="/WEB-INF/main/content.jsp"/>
+		<put-attribute name="footer" value="/WEB-INF/main/footer.jsp"/>
+	</definition>
+	
+	<!-- <definition name="board/list" extends="main"> extends="main" : 위의 4개가 전부 실행된다. 
+		<put-attribute name="content" value="/WEB-INF/board/list.jsp"/> content 부분만 list.jsp로 바꾸라는 뜻 
+	</definition>
+	
+	<definition name="notice/list" extends="main">
+		<put-attribute name="content" value="/WEB-INF/notice/list.jsp"/>
+	</definition> -->
+	
+	<!-- 위의 방법으로 하면 리턴형이 너무 많아진다. -->
+	
+	<!-- 간단한 방법 -->
+	<definition name="*/*" extends="main"> <!-- 경로명/파일명 -->
+		<put-attribute name="content" value="/WEB-INF/{1}/{2}.jsp"/> <!-- content만 바꾸고 나머지는 유지 -->
+	</definition>
+	
+</tiles-definitions>

@@ -62,6 +62,7 @@ public class MusicNewsMain {
     					String content=content_e.text();
     					System.out.println(content_e.text());
     					
+    					// 넣기
     					MusicNewsVO vo=new MusicNewsVO();
     					vo.setCateno(5);
     					vo.setTitle(title);
