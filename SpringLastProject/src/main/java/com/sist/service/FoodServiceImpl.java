@@ -7,7 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.sist.dao.FoodDAO;
+import com.sist.dao.NoticeDAO;
 import com.sist.vo.FoodVO;
+import com.sist.vo.NoticeVO;
 
 @Service
 public class FoodServiceImpl implements FoodService{
@@ -26,5 +28,57 @@ public class FoodServiceImpl implements FoodService{
 		// TODO Auto-generated method stub
 		return fDao.foodFindCount(map);
 	}
+
+	@Override
+	public FoodVO foodDetailData(int fno) {
+		// TODO Auto-generated method stub
+		return fDao.foodDetailData(fno);
+	}
+
+	@Override
+	public List<FoodVO> foodListData(Map map) {
+		// TODO Auto-generated method stub
+		return fDao.foodListData(map);
+	}
+
+	@Override
+	public int foodListCount() {
+		// TODO Auto-generated method stub
+		return fDao.foodListCount();
+	}
+
+	@Override
+	public FoodVO foodListDetailData(int fno) {
+		// TODO Auto-generated method stub
+		return fDao.foodListDetailData(fno);
+	}
+	
+	// 공지사항 service
+	@Autowired
+	private NoticeDAO nDao;
+
+	@Override
+	public List<NoticeVO> noticeTop7() {
+		// TODO Auto-generated method stub
+		return nDao.noticeTop7();
+	}
+	
+	// 인기맛집
+	@Override
+	public List<FoodVO> foodTop7() {
+		// TODO Auto-generated method stub
+		return fDao.foodTop7();
+	}
+
+	// 인기맛집 home
+	@Override
+	public List<FoodVO> foodHome12() {
+		// TODO Auto-generated method stub
+		return fDao.foodHome12();
+	}
+	
+	
+	
+	
 
 }
