@@ -6,11 +6,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sist.manager.FoodRecommandManager;
 import com.sist.service.*;
 import com.sist.vo.*;
 
@@ -54,6 +57,9 @@ import com.sist.vo.*;
 public class FoodRestController {
 	@Autowired
 	private FoodService service;
+	
+	@Autowired
+	private FoodRecommandManager mgr;
 	
 	@GetMapping(value = "find_vue.do", produces = "text/plain;charset=UTF-8")
 	public String food_find(int page, String fd) throws Exception
@@ -188,6 +194,118 @@ public class FoodRestController {
 		String json=mapper.writeValueAsString(vo);
 		return json;
 	}
+	
+	@GetMapping(value = "food_recommand_sub.do", produces = "text/plain;charset=UTF-8")
+	public String food_recommand(int no) throws Exception
+	{
+		String[] menu1= {
+				"퇴근길", "휴식", "휴가", "여행", "드라이브", "산책", "운동"
+		};
+		String[] menu2= {
+				"기분전환", "외로움", "슬픔", "힘찬", "이별", "지침", "힘듦", "설렘", "오후", "위로", "밤", "새벽", "저녁", "아침", "사랑", "축하"
+		};
+		String[] menu3= {
+				"밝은", "신나는", "편안한", "따뜻한", "달콤한", "발렌타인데이", "화이트데이"
+		};
+		String[] menu4= {
+				"봄", "여름", "가을", "겨울", "추운날", "흐린날", "비오는날", "더운날", "눈오는날"
+		};
+		
+		ObjectMapper mapper=new ObjectMapper();
+		String json="";
+		if(no==1)
+		{
+			json=mapper.writeValueAsString(menu1);
+		}
+		else if(no==2)
+		{
+			json=mapper.writeValueAsString(menu2);
+		}
+		else if(no==3)
+		{
+			json=mapper.writeValueAsString(menu3);
+		}
+		else if(no==4)
+		{
+			json=mapper.writeValueAsString(menu4);
+		}
+		
+		return json;
+	}
+	
+	@GetMapping(value = "food_recommand_data.do", produces = "text/plain;charset=UTF-8" )
+	public String food_recommand_data(String fd) throws Exception
+	{
+		List<String> list=mgr.newsFind(fd);
+		List<String> fList=service.foodAllData();
+		/*
+			1. 단어 => constains()
+			2. 기호 : * (0 이상)	맛있다 , 맛있고 , 맛있는 => 맛* (맛으로 시작하는 모든 단어)
+					 + (1 이상)  맛+
+					 ? (0, 1)
+					 | (선택)
+					 . 임의의 한글자 맛.
+					 => 실제 기호 : \\+
+					 [] => 범위
+					    숫자 [0-3] => [0-9]
+					    영문 [A-Z] [a-z] => [A-Za-z]
+					    한글 [가-힣]
+					 {} => 갯수
+					 {3} , {1,3}
+					 ^ : 시작
+					 $ : 끝
+		 */
+		
+		List<String> rList=new ArrayList<String>();
+		int[] count=new int[fList.size()];
+		for(String s:list) // 추천
+		{
+			System.out.println(s);
+			for(int i=0;i<fList.size();i++)
+			{
+				if(s.contains(fList.get(i)))
+				{
+					System.out.println(fList.get(i));
+					rList.add(fList.get(i));
+					count[i]++;
+				}
+			}
+		}
+		Set set=new HashSet();
+		for(int i=0;i<rList.size();i++)
+		{
+			set.add(rList.get(i)); // 중복제거
+		}
+		
+		List<FoodVO> dList=new ArrayList<FoodVO>();
+		Iterator iter=set.iterator();
+		while(iter.hasNext())
+		{
+			String ss=iter.next().toString();
+			List<FoodVO> vo=service.foodNameInfoData(ss);
+			dList.add(vo.get(0));
+		}
+		//JSON변경
+		ObjectMapper mapper=new ObjectMapper();
+		String json=mapper.writeValueAsString(dList);
+		return json;
+	}
+	
+	@GetMapping(value="food_detail_recipe.do", produces = "text/plain;charset=UTF-8")
+	public String food_detail_recipe(int fno) throws Exception
+	{
+		FoodVO vo=service.foodListDetailData(fno);
+		System.out.println("type:"+vo.getType());
+		String s=vo.getType().replace("/", "|");
+		
+		List<RecipeVO> list=service.foodRecipeData(s);
+		
+		//JSON변경
+		ObjectMapper mapper=new ObjectMapper();
+		String json=mapper.writeValueAsString(list);
+		return json;
+	}
+
 }
 
 

@@ -54,4 +54,36 @@ public interface FoodMapper {
 			+"FROM food_menu_house ORDER BY hit DESC) "
 			+"WHERE rownum<=12")
 	public List<FoodVO> foodHome12();
+	
+	// 추천
+	@Select("SELECT name FROM food_menu_house WHERE length(name)>1 ORDER BY fno ASC")
+	public List<String> foodAllData();
+	
+	@Select("SELECT fno, name, poster "
+			+"FROM food_menu_house "
+			+"WHERE name=#{name}")
+	public List<FoodVO> foodNameInfoData(String name);
+	
+	// 관련레시피
+	@Select("SELECT no, title, poster, rownum "
+			+"FROM recipe "
+			+"WHERE no IN(SELECT no FROM recipe "
+			+"INTERSECT SELECT no FROM recipeDetail) "
+			+"AND REGEXP_LIKE(title, #{title}) "
+			+"AND rownum<=12")
+	public List<RecipeVO> foodRecipeData(String title);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+

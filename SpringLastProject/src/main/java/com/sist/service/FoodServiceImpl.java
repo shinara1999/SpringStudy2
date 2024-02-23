@@ -10,6 +10,7 @@ import com.sist.dao.FoodDAO;
 import com.sist.dao.NoticeDAO;
 import com.sist.vo.FoodVO;
 import com.sist.vo.NoticeVO;
+import com.sist.vo.RecipeVO;
 
 @Service
 public class FoodServiceImpl implements FoodService{
@@ -75,6 +76,24 @@ public class FoodServiceImpl implements FoodService{
 	public List<FoodVO> foodHome12() {
 		// TODO Auto-generated method stub
 		return fDao.foodHome12();
+	}
+
+	@Override
+	public List<String> foodAllData() {
+		// TODO Auto-generated method stub
+		return fDao.foodAllData();
+	}
+
+	@Override
+	public List<FoodVO> foodNameInfoData(String name) {
+		// TODO Auto-generated method stub
+		return fDao.foodNameInfoData(name);
+	}
+
+	@Override
+	public List<RecipeVO> foodRecipeData(String title) {
+		// TODO Auto-generated method stub
+		return fDao.foodRecipeData(title);
 	}
 	
 	

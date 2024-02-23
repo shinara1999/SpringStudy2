@@ -74,6 +74,21 @@ a.link:hover, img.img_click:hover{
     </div>
   
     <div class="clear"></div>
+    
+    <!-- 관련레시피 -->
+    <div class="row">
+     <div class="col-md-3" v-for="r in recipe_list">
+	    <div class="thumbnail">
+	      <a :href="'../recipe/recipe_detail.do?no='+r.no">
+	        <img :src="r.poster" :title="r.title" style="width:100%">
+	        <div class="caption">
+	          
+	        </div>
+	      </a>
+	    </div>
+	  </div>
+    </div>
+    
   </main>
 </div>
 <script>
@@ -81,13 +96,16 @@ a.link:hover, img.img_click:hover{
 	 data(){
 		 return{
 			 food_detail:{},
-			 fno:${fno}
+			 fno:${fno},
+			 food_type:'',
+			 recipe_list:[]
 		 }
 	 },
 	 mounted(){
 		 axios.get('../food/food_detail_vue.do',{
 			 params:{
-				fno:this.fno 
+				fno:this.fno
+				
 			 }
 		 }).then(response=>{
 			 console.log(response.data)
@@ -101,6 +119,14 @@ a.link:hover, img.img_click:hover{
 			 {
 				 this.addScript()
 			 }
+		 })
+		 
+		 axios.get('../food/food_detail_recipe.do',{
+			 params:{
+				 fno:this.fno
+			 }
+		 }).then(response=>{
+			 this.recipe_list=response.data
 		 })
 	 },
 	 methods:{

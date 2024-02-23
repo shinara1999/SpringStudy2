@@ -1,6 +1,7 @@
 package com.sist.mapper;
 import java.util.*;
 
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -50,13 +51,13 @@ public interface MusicBoardMapper {
 	public void noticeInsert(MusicBoardVO vo);
 	
 	// question 새 글 작성
-	@Insert("INSERT INTO musicBoard(no, typeno, title, name, content, regdate, hit, filename, filesize, filecount) "
-			+"VALUES(mb_no_seq.nextval, 3, #{title}, #{name}, #{content}, SYSDATE, 0, #{filename}, #{filesize}, #{filecount})")
+	@Insert("INSERT INTO musicBoard(no, typeno, title, name, content, regdate, hit, pwd) "
+			+"VALUES(mb_no_seq.nextval, 3, #{title}, #{name}, #{content}, SYSDATE, 0, #{pwd})")
     public void questionInsert(MusicBoardVO vo);
 	
 	// schand 새 글 작성
-	@Insert("INSERT INTO musicBoard(no, typeno, title, name, content, regdate, hit, filename, filesize, filecount) "
-			+"VALUES(mb_no_seq.nextval, 4, #{title}, #{name}, #{content}, SYSDATE, 0, #{filename}, #{filesize}, #{filecount})")
+	@Insert("INSERT INTO musicBoard(no, typeno, title, name, content, regdate, hit, pwd) "
+			+"VALUES(mb_no_seq.nextval, 4, #{title}, #{name}, #{content}, SYSDATE, 0, pwd)")
     public void schandInsert(MusicBoardVO vo);
    
     // 상세보기 (조회수 증가)
@@ -69,6 +70,27 @@ public interface MusicBoardMapper {
 		    +"FROM musicBoard "
 		    +"WHERE no=#{no}")
     public MusicBoardVO boardDetailData(int no);
+    
+    // 삭제 (파일)
+    @Select("SELECT filename,filecount "
+ 		  +"FROM musicBoard "
+ 		  +"WHERE no=#{no}")
+    public MusicBoardVO databoardFileInfoData(int no);
+    
+    // 삭제
+    @Select("SELECT pwd FROM musicBoard "
+ 		  +"WHERE no=#{no}")
+    public String databoardGetPassword(int no);
+    
+    @Delete("DELETE FROM musicBoard "
+ 		  +"WHERE no=#{no}")
+    public void databoardDelete(int no);
+    
+    // 수정 
+    @Update("UPDATE musicBoard SET "
+ 		  +"name=#{name}, title=#{title}, content=#{content} "
+ 		  +"WHERE no=#{no}")
+    public void databoardUpdate(MusicBoardVO vo);
   
 }
 
