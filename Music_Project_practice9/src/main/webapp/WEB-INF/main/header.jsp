@@ -54,7 +54,7 @@ a#notice:hover{
 	                    	<a href="../mypage/main.do" class="nav-item nav-link">마이페이지</a>   
 	                    </sec:authorize>
 	                    <sec:authorize access="hasRole('ROLE_ADMIN')">
-		                    <a href="../admin/main.do" class="nav-item nav-link">관리자페이지</a>
+		                    <a href="../adminpage/userlist.do" class="nav-item nav-link">관리자페이지</a> <!-- /////////////// -->
 	                    </sec:authorize>
                     </div>
                     
