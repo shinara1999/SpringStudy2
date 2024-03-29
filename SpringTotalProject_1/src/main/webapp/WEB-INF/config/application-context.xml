@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd">
+
+	<!-- 
+			application-content : 사용자 정의
+			application-datasource : 데이터베이스 연동
+			application-security : 보안 => 우선순위 로딩
+			application-websocket : 웹채팅...
+			
+			사용자 요청
+			=> DispatcherServlet을 연결
+			   *.do
+			   |
+			   ==================== WebApplicationContext ======================
+			   1) 처리하는 클래스를 찾아라. => 구분자 @GetMapping =====> HandlerMapping
+			   2) 처리한 결과값을 보내라. => model.addAttribute()
+			   3) 어떤 JSP로 보낼지 확인 => return "board/list"; ===> ViewResolver
+			   =================================================================
+			   => 스프링 => .jsp를 등록하지 않으면 못찾는다.
+	 -->
+	 <!-- 
+	 		p => property (변수)
+	 		DI = 주입 (스프링을 통해서 변수값을 주입)
+	 		 1) 변수에 값을 주입 (작은의미의 DI)
+	 		    변수에 값을 설정하는 방법
+	 		    = setXxx() => p:
+	 		    = 생성자의 매개변수 이용 => c:
+	 		    = 메소드 DI => 생성 / 소멸
+	 		 2) 클래스와 클래스의 연관관계 => IoC (Inversion of Controller)
+	 		 => 목적 => 느슨한 관계 (결합성이 낮은 프로그램)
+	 		 						|
+	 		 					  클래스의 영향 => ***POJO (독립적인 클래스 이용 방식)
+	  -->
+	 <aop:aspectj-autoproxy/>
+	 <context:component-scan base-package="com.sist.*"/>
+	 <bean 
+	 	id="viewResolver"
+	 	class="org.springframework.web.servlet.view.InternalResourceViewResolver"
+	 	p:prefix="/"
+	 	p:suffix=".jsp"
+	 />
+
+</beans>
